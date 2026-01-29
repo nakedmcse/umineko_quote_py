@@ -2,17 +2,21 @@
 import string
 from parser import ParsedQuote
 from typing import List, Dict
-from collections import Counter
+from collections import Counter, defaultdict
+translator = str.maketrans('', '', string.punctuation)
 
 # Indexer
 def index_words(position:int, quote:ParsedQuote, index:Dict[str, List[int]]):
-    translator = str.maketrans('', '', string.punctuation)
     clean_text = quote.text.translate(translator)
+    seen = defaultdict(set)
     for word in clean_text.lower().split():
-        if word not in index:
-            index[word] = []
-        if position not in index[word]:
+        if position in seen[word]:
+            continue
+        seen[word].add(position)
+        if word in index:
             index[word].append(position)
+            continue
+        index[word] = [position]
 
 def build_index(quotes: List[ParsedQuote]) -> Dict[str, List[int]]:
     index = {}
@@ -22,7 +26,6 @@ def build_index(quotes: List[ParsedQuote]) -> Dict[str, List[int]]:
 
 # Search
 def search(query: str, quotes: List[ParsedQuote], index: Dict[str, List[int]]) -> List[ParsedQuote]:
-    translator = str.maketrans('', '', string.punctuation)
     query = query.lower().translate(translator)
     query_hits = []
     for word in query.split():
