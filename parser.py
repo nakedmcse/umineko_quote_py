@@ -32,6 +32,7 @@ class ParsedQuote:
     text: str
     character_id: int
     episode: int
+    audio_ids: List[int]
 
 # Parser
 def extract_text(text: str) -> str:
@@ -53,19 +54,15 @@ def parse_line(line: str) -> ParsedQuote | None:
     first_audio_id = all_matches[0][1]
     episode = int(first_audio_id[0])
 
-    seen = {}
-    audio_ids = []
+    audio_ids = set()
     for match in all_matches:
-        a_id = match[1]
-        if a_id not in seen:
-            seen[id] = True
-            audio_ids.append(id)
+        audio_ids.add(match[1])
 
     text = extract_text(line)
     if text == "":
         return None
 
-    return ParsedQuote(text, character_id, episode)
+    return ParsedQuote(text, character_id, episode, list(audio_ids))
 
 def parse_all_quotes(filename: str) -> List[ParsedQuote]:
     with open(filename, "r") as file:

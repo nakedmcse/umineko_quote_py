@@ -3,16 +3,17 @@ import time
 from parser import parse_all_quotes
 from indexer import build_index, search
 from characters import get_character_name
+from utils import get_size,sizeWords
 
 start = time.time()
 parsed = parse_all_quotes('umineko.txt')
 end = time.time()
-print(f"Parsed quotes in {(end-start)*1000:.4f} ms")
+print(f"Parsed quotes ({sizeWords(get_size(parsed))}) in {(end-start)*1000:.4f} ms")
 
 start = time.time()
 index = build_index(parsed)
 end = time.time()
-print(f"Indexed quotes in {(end-start)*1000:.4f} ms")
+print(f"Indexed quotes ({sizeWords(get_size(index))}) in {(end-start)*1000:.4f} ms")
 print()
 
 start = time.time()
