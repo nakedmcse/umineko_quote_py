@@ -1,36 +1,32 @@
 # Umineko indexer and search
 import string
 from parser import ParsedQuote
-from typing import List, Dict
-from collections import Counter, defaultdict
+from typing import List, Dict, Set
 translator = str.maketrans('', '', string.punctuation)
 
 # Indexer
-def index_words(position:int, quote:ParsedQuote, index:Dict[str, List[int]]):
+def index_words(position:int, quote:ParsedQuote, index:Dict[str, Set[int]]):
     clean_text = quote.text.translate(translator)
-    seen = defaultdict(set)
     for word in clean_text.lower().split():
-        if position in seen[word]:
-            continue
-        seen[word].add(position)
-        if word in index:
-            index[word].append(position)
-            continue
-        index[word] = [position]
+        if word not in index:
+            index[word] = set()
+        index[word].add(position)
 
-def build_index(quotes: List[ParsedQuote]) -> Dict[str, List[int]]:
+def build_index(quotes: List[ParsedQuote]) -> Dict[str, Set[int]]:
     index = {}
     for i in range(len(quotes)):
         index_words(i, quotes[i], index)
     return index
 
 # Search
-def search(query: str, quotes: List[ParsedQuote], index: Dict[str, List[int]]) -> List[ParsedQuote]:
+def search(query: str, quotes: List[ParsedQuote], index: Dict[str, Set[int]]) -> List[ParsedQuote]:
     query = query.lower().translate(translator)
-    query_hits = []
+    query_hits = set()
     for word in query.split():
         if word in index:
-            query_hits.extend(index[word])
-    counted_hits = Counter(query_hits)
-    results_found = [quotes[i[0]] for i in counted_hits.most_common() if i[1] == len(query.split()) ]
+            if not query_hits:
+                query_hits = query_hits.union(index[word])
+            else:
+                query_hits = query_hits.intersection(index[word])
+    results_found = [quotes[i] for i in query_hits]
     return results_found
