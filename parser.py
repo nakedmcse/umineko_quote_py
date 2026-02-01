@@ -15,13 +15,13 @@ cleanup_patterns = [
 ]
 text_rules = [
     (re.compile(r'\{n\}'), ' '),
-    (re.compile(r'\{c:([A-Fa-f0-9]+):([^}]+)\}'),'$2'),
-    (re.compile(r'\{f:\d+:([^}]+)\}'), '$1'),
-    (re.compile(r'\{p:\d{2,}:([^}]+)\}'), '$1'),
-    (re.compile(r'\{p:1:([^}]+)\}?'), '$1'),
-    (re.compile(r'\{p:2:([^}]+)\}?'), '$1'),
-    (re.compile(r'\{ruby:([^:]+):([^}]+)\}'), '$2 ($1)'),
-    (re.compile(r'\{i:([^}]+)\}'), '$1'),
+    (re.compile(r'\{c:([A-Fa-f0-9]+):([^}]+)\}'), r'\2'),
+    (re.compile(r'\{f:\d+:([^}]+)\}'), r'\1'),
+    (re.compile(r'\{p:\d{2,}:([^}]+)\}'), r'\1'),
+    (re.compile(r'\{p:1:([^}]+)\}?'), r'\1'),
+    (re.compile(r'\{p:2:([^}]+)\}?'), r'\1'),
+    (re.compile(r'\{ruby:([^:]+):([^}]+)\}'), r'\2 (\1)'),
+    (re.compile(r'\{i:([^}]+)\}'), r'\1'),
     (re.compile(r'\{[a-z]+:[^}]*\}'), ''),
     (re.compile(r'\`'), ''),
 ]
