@@ -5,13 +5,13 @@ from typing import List
 
 # Parsing Regexes
 dialog_line_regex = re.compile(r'^d2? \[lv')
-voice_meta_regex = re.compile(r'\[lv 0\*"(\d+)"\*"(\d+)"\]')
+voice_meta_regex = re.compile(r'\[lv 0\*"(\d+)"\*"(.+)"\]')
 narrator_line_regex = re.compile(r'^d2? `')
 bracket_regex = re.compile(r'\[[^\]]*\]')
 episode_marker_regex = re.compile(r'^new_(?:tea|ura|episode) (\d+)\r?$')
 cleanup_patterns = [
     "`[@]", "`[\\]", "`[|]", "`\"", "\"`",
-    "[@]", "[\\]", "[|]",
+    "[@]", "[\\]", "[|]", "\"\""
 ]
 text_rules = [
     (re.compile(r'\{n\}'), ' '),
@@ -52,7 +52,7 @@ def parse_line(line: str) -> ParsedQuote | None:
 
     character_id = int(all_matches[0][0])
     first_audio_id = all_matches[0][1]
-    episode = int(first_audio_id[0])
+    episode = int(first_audio_id[0]) if first_audio_id[0].isdigit() else -1
 
     audio_ids = set()
     for match in all_matches:

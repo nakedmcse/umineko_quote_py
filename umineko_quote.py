@@ -31,3 +31,11 @@ print(f'Search two: "it seems that no one" - {len(search_two)} results in {(end-
 for r in search_two:
     print(f'{get_character_name(r.character_id)} - Ep. {r.episode}: {r.text}')
 print()
+
+start = time.time()
+search_three = search('with your fellow monsters', parsed, index)
+end = time.time()
+print(f'Search three: "with your fellow monsters" - {len(search_three)} results in {(end-start)*1000:.4f} ms')
+for r in search_three:
+    print(f'{get_character_name(r.character_id)} - Ep. {r.episode}: {r.text}')
+print()
