@@ -5,7 +5,7 @@ from typing import List
 
 # Parsing Regexes
 dialog_line_regex = re.compile(r'^d2? \[lv')
-voice_meta_regex = re.compile(r'\[lv 0\*"(\d+)"\*"(.+)"\]')
+voice_meta_regex = re.compile(r'\[lv 0\*"(\d+)"\*"(.*)"\]')
 narrator_line_regex = re.compile(r'^d2? `')
 bracket_regex = re.compile(r'\[[^\]]*\]')
 episode_marker_regex = re.compile(r'^new_(?:tea|ura|episode) (\d+)\r?$')
