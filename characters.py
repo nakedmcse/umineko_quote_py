@@ -62,6 +62,7 @@ character_names = {
     59: "BiceChickBeato",
     60: "BeatoElder",
     99: "MiscVoices",
+    100: "Narrator"
 }
 
 def get_character_name(c_id:int) -> str:
