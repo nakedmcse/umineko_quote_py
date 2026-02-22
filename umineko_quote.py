@@ -39,3 +39,11 @@ print(f'Search three: "with your fellow monsters" - {len(search_three)} results 
 for r in search_three:
     print(f'{get_character_name(r.character_id)} - Ep. {r.episode}: {r.text}')
 print()
+
+start = time.time()
+search_four = search('nipah', parsed, index)
+end = time.time()
+print(f'Search one: "nipah" - {len(search_four)} results in {(end-start)*1000:.4f} ms')
+for r in search_four:
+    print(f'{get_character_name(r.character_id)} - Ep. {r.episode}: {r.text}')
+print()
