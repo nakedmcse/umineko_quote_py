@@ -1,12 +1,18 @@
 # Partial Umineko Quote Finder Implementation
 import time
+from ons2decoder import decode_ons2_file
 from parser import parse_all_quotes
 from indexer import build_index, search
 from characters import get_character_name
 from utils import get_size,sizeWords
 
 start = time.time()
-parsed = parse_all_quotes('umineko.txt')
+decoded = decode_ons2_file('umineko-en.ons2')
+end = time.time()
+print(f"Decoded {len(decoded)} lines in {(end - start)*1000:.4f} ms")
+
+start = time.time()
+parsed = parse_all_quotes(decoded)
 end = time.time()
 print(f"Parsed {len(parsed)} quotes ({sizeWords(get_size(parsed))}) in {(end-start)*1000:.4f} ms")
 

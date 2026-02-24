@@ -85,7 +85,6 @@ def parse_dline(line: str) -> ParsedQuote | None:
     quote.audio_ids = list(audio_ids)
     return quote
 
-def parse_all_quotes(filename: str) -> List[ParsedQuote]:
-    with open(filename, "r") as file:
-        quotes = [y for y in (parse_dline(x) for x in file.read().splitlines() if x.startswith(("d ","d2 "))) if y is not None]
+def parse_all_quotes(script: str) -> List[ParsedQuote]:
+    quotes = [y for y in (parse_dline(x) for x in script.splitlines() if x.startswith(("d ","d2 "))) if y is not None]
     return quotes
