@@ -45,15 +45,9 @@ def decode_ons2_file(file_path: str) -> str:
         if file_content[0:4].decode("ascii") != 'ONS2':
             raise RuntimeError(f"File {file_path} does not contain ONS2 data")
         compressed_length = int.from_bytes(file_content[4:8], byteorder='little')
-        original_length = int.from_bytes(file_content[8:12], byteorder='little')
 
-        compressed_data = [0] * compressed_length
-        for i in range(compressed_length):
-            compressed_data[i] = pass_2_translation[file_content[16 + i]]
-
+        compressed_data = [pass_2_translation[v] for v in file_content[16:16+compressed_length]]
         expanded_data = zlib.decompress(bytearray(compressed_data))
-        final_data = [0] * original_length
-        for i in range(original_length):
-            final_data[i] = pass_1_translation[expanded_data[i]]
+        final_data = [pass_1_translation[v] for v in expanded_data]
 
         return bytearray(final_data).decode("utf-8")
