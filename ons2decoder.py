@@ -1,7 +1,7 @@
 # ONS2 file decoder
 import zlib
 
-pass_1_translation = [
+pass_1_translation = bytes([
     165, 176, 167, 250, 214, 93, 241, 128, 249, 138, 77, 60, 85, 174, 134, 92,
     2, 226, 244, 158, 130, 3, 90, 170, 195, 45, 229, 122, 159, 242, 252, 179,
     31, 61, 10, 114, 217, 76, 109, 78, 48, 1, 219, 161, 43, 108, 208, 32,
@@ -18,9 +18,9 @@ pass_1_translation = [
     36, 104, 6, 255, 96, 118, 106, 215, 190, 124, 66, 166, 54, 123, 137, 151,
     234, 175, 34, 88, 110, 82, 19, 205, 35, 69, 186, 246, 153, 25, 199, 80,
     37, 24, 247, 150, 8, 121, 22, 133, 204, 112, 64, 119, 197, 155, 0, 81
-]
+])
 
-pass_2_translation = [
+pass_2_translation = bytes([
     33, 222, 39, 249, 29, 185, 24, 55, 66, 157, 109, 192, 217, 188, 64, 250,
     173, 84, 58, 118, 133, 56, 36, 50, 244, 16, 46, 236, 197, 219, 41, 100,
     10, 112, 253, 184, 159, 65, 0, 60, 164, 232, 23, 113, 2, 149, 75, 203,
@@ -37,17 +37,18 @@ pass_2_translation = [
     204, 166, 176, 80, 248, 8, 81, 208, 40, 183, 127, 145, 225, 174, 160, 205,
     32, 88, 111, 77, 28, 63, 30, 139, 243, 137, 83, 98, 114, 130, 62, 121,
     59, 85, 54, 138, 238, 246, 131, 93, 156, 136, 25, 186, 92, 45, 234, 94
-]
+])
 
 def decode_ons2_file(file_path: str) -> str:
     with open(file_path, "rb") as file:
         file_content = file.read()
-        if file_content[0:4].decode("ascii") != 'ONS2':
+        if file_content[0:4] != b'ONS2':
             raise RuntimeError(f"File {file_path} does not contain ONS2 data")
         compressed_length = int.from_bytes(file_content[4:8], byteorder='little')
 
-        compressed_data = [pass_2_translation[v] for v in file_content[16:16+compressed_length]]
-        expanded_data = zlib.decompress(bytearray(compressed_data))
-        final_data = [pass_1_translation[v] for v in expanded_data]
+        compressed_slice = file_content[16:16 + compressed_length]
+        translated = compressed_slice.translate(pass_2_translation)
+        expanded = zlib.decompress(translated)
+        final_bytes = expanded.translate(pass_1_translation)
 
-        return bytearray(final_data).decode("utf-8")
+        return final_bytes.decode("utf-8")
