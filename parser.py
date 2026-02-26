@@ -14,7 +14,7 @@ class ParsedQuote:
     text: str
     character_id: int
     episode: int
-    audio_ids: List[int]
+    audio_ids: List[str]
 
 # Parser
 def apply_format(string: str) -> str:

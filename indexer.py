@@ -9,7 +9,7 @@ translator = str.maketrans('', '', string.punctuation)
 @dataclass
 class MultiIndex:
     Words: Dict[str, Set[int]]
-    Audio: Dict[int, Set[int]]
+    Audio: Dict[str, Set[int]]
 
 # Indexer
 def index_words(position:int, quote:ParsedQuote, index:Dict[str, Set[int]]):
@@ -19,7 +19,7 @@ def index_words(position:int, quote:ParsedQuote, index:Dict[str, Set[int]]):
             index[word] = set()
         index[word].add(position)
 
-def index_audio(position:int, quote:ParsedQuote, index:Dict[int, Set[int]]):
+def index_audio(position:int, quote:ParsedQuote, index:Dict[str, Set[int]]):
     for audio_id in quote.audio_ids:
         if audio_id not in index:
             index[audio_id] = set()
@@ -45,7 +45,7 @@ def search(query: str, quotes: List[ParsedQuote], index: Dict[str, Set[int]]) ->
     results_found = [quotes[i] for i in query_hits]
     return results_found
 
-def search_audio(query: int, quotes: List[ParsedQuote], index: Dict[int, Set[int]]) -> List[ParsedQuote]:
+def search_audio(query: str, quotes: List[ParsedQuote], index: Dict[str, Set[int]]) -> List[ParsedQuote]:
     if query not in index:
         return []
     return [quotes[i] for i in index[query]]

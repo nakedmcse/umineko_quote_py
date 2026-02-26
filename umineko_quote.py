@@ -49,13 +49,13 @@ print()
 start = time.time()
 search_four = search('nipah', parsed, index.Words)
 end = time.time()
-print(f'Search one: "nipah" - {len(search_four)} results in {(end-start)*1000:.4f} ms')
+print(f'Search four: "nipah" - {len(search_four)} results in {(end-start)*1000:.4f} ms')
 for r in search_four:
     print(f'{get_character_name(r.character_id)} - Ep. {r.episode}: {r.text}')
 print()
 
 start = time.time()
-search_five = search_audio(92100169, parsed, index.Audio)
+search_five = search_audio('92100169', parsed, index.Audio)
 end = time.time()
 print(f'Search five: audio Id 92100169 - {len(search_five)} results in {(end-start)*1000:.4f} ms')
 for r in search_five:
